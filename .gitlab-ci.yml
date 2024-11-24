@@ -1,0 +1,70 @@
+# .gitlab-ci.yml
+
+stages:
+  - build
+
+variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+
+build_creational:
+  image: mcr.microsoft.com/dotnet/sdk:7.0
+  stage: build
+  script:
+    - dotnet --version
+    - |
+      # Build und Ausführung aller Projekte in der Kategorie Creational
+      find Creational -name "*.csproj" -print0 | while IFS= read -r -d '' csproj; do
+        dir=$(dirname "$csproj")
+        echo "Building project in $dir"
+        dotnet build "$dir" --configuration Release
+        echo "Running project in $dir"
+        dotnet run --project "$dir" --no-build --configuration Release
+      done
+  artifacts:
+    when: always
+    paths:
+      - "Creational/**/bin/**"
+      - "Creational/**/obj/**"
+    expire_in: 1 week
+
+build_structural:
+  image: mcr.microsoft.com/dotnet/sdk:7.0
+  stage: build
+  script:
+    - dotnet --version
+    - |
+      # Build und Ausführung aller Projekte in der Kategorie Structural
+      find Structural -name "*.csproj" -print0 | while IFS= read -r -d '' csproj; do
+        dir=$(dirname "$csproj")
+        echo "Building project in $dir"
+        dotnet build "$dir" --configuration Release
+        echo "Running project in $dir"
+        dotnet run --project "$dir" --no-build --configuration Release
+      done
+  artifacts:
+    when: always
+    paths:
+      - "Structural/**/bin/**"
+      - "Structural/**/obj/**"
+    expire_in: 1 week
+
+build_behavioral:
+  image: mcr.microsoft.com/dotnet/sdk:7.0
+  stage: build
+  script:
+    - dotnet --version
+    - |
+      # Build und Ausführung aller Projekte in der Kategorie Behavioral
+      find Behavioral -name "*.csproj" -print0 | while IFS= read -r -d '' csproj; do
+        dir=$(dirname "$csproj")
+        echo "Building project in $dir"
+        dotnet build "$dir" --configuration Release
+        echo "Running project in $dir"
+        dotnet run --project "$dir" --no-build --configuration Release
+      done
+  artifacts:
+    when: always
+    paths:
+      - "Behavioral/**/bin/**"
+      - "Behavioral/**/obj/**"
+    expire_in: 1 week
